@@ -2,16 +2,23 @@ import jwt
 import datetime
 import json
 from flask import Flask, jsonify, request
+from cipher import decrypt, encrypt
+from urllib.parse import unquote
 
 service = Flask(__name__)
 
+# Service data
 DEBUG = True
-USERS_PATH = '/dictionaries/users.json'  
-KEY_PATH = '/dictionaries/config.json'   
-CERTIFICATE_KEY = '/certificate/key.pem'  
-CERTIFICATE = '/certificate/cert.pem'    
 HOST = '0.0.0.0'
-PORT = 5000
+PORT = 5000 
+
+# Dictionaries
+USERS_PATH = '/dictionaries/users.json' 
+KEY_PATH = '/dictionaries/config.json' 
+
+# SSL files
+CERTIFICATE_KEY = '/ssl_files/certificate_key.pem' 
+CERTIFICATE = '/ssl_files/certificate.pem' 
 
 def start():
     global users_list
@@ -40,9 +47,13 @@ def find_right_user(login, password):
         if user['login'] == login and user['password'] == password:
             response = True
             user_id = user['id']
+            public_key = user['publickey']
             break
-    
-    return response, user_id
+
+    if response == True:
+        return response, user_id, public_key
+    else:
+        return response, None, None
 
 def run():
     service.run( 
@@ -53,22 +64,46 @@ def run():
 
 @service.route('/authenticate')
 def authenticate():
-    data = json.loads(request.args.get('data'))
+    response = None 
+    public_key = None
+    # Prepare data from front-end to decrypt
+    data = unquote(request.args.get("data"))
     
-    login = data['login']
-    password = data['password']
+    # Decrypt data from front end
+    error, decrypted_data = decrypt(data)
     
-    response, user_id = find_right_user(login, password)
-    if response:
-        token = jwt.encode({'id' : user_id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, get_key(), algorithm="HS256")
+    if not error:
+        # Load string to json format
+        credentials = json.loads(decrypted_data)
         
-        return jsonify({
-            "result" : 'authenticated', 
-            "token" : token.decode('UTF-8')
-        }) 
+        login = credentials["login"]
+        password = credentials["password"]        
         
-    return jsonify({ "result" : 'unauthenticated' }) 
+        response, user_id, pub_key = find_right_user(login, password)
+        public_key = pub_key
+        
+        if response:
+            token = jwt.encode({'id' : user_id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, get_key(), algorithm="HS256")
+            
+            response = {
+                "result" : 'authenticated', 
+                "token" : token.decode('UTF-8'),
+            }
+        else:
+            response = { "result" : 'unauthenticated'} 
+    else:
+        response = { "result" : "Something went wrong, please try again later"}
+
+    # Encrypt the data to return
+    error, encrypted = encrypt(public_key, json.dumps(response, separators=(',', ':')))
+    response = encrypted
+    
+    # If something  goes wrong with the encryption the text error will be returned
+    if error:
+        response = "error user not found"
+
+    return response
 
 if __name__ == '__main__':
-    start() 
+    start()
     run()

@@ -1,2 +1,4 @@
-flask
+Flask
 PyJWT==1.7.1
+pycryptodome==3.10.4
+urllib3

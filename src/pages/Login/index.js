@@ -52,16 +52,30 @@ export default class Login extends React.Component {
     authenticateUser = () => {
         const { login, password } = this.state
         
-        authenticate(login, password).then((authenticationResult) => {
-            this.isAuthenticated(authenticationResult)
-        }).catch((error) => {
-            console.error("Error authenticating the user.   \n Details: ", error)
-        })
- 
+        if (!this.isTheFieldEmpty(login, password)){
+            authenticate(login, password).then((authenticationResult) => {
+                this.isAuthenticated(authenticationResult)
+            }).catch((error) => {
+                console.error("Error authenticating the user.   \n Details: ", error)
+            })
+        }else{
+            Toast.show("ERRO! Por favor preencha todos os campos.",
+                Toast.LONG
+            )   
+        }
     }
 
-    isAuthenticated = (authentication) =>{
+    isTheFieldEmpty = (login, password) =>{
+        let empty = false
         
+        if(login == "" || password == ""){
+            empty = true  
+        }
+
+        return empty
+    }
+
+    isAuthenticated = (authentication) => {
         if (authentication["result"] == "authenticated") {
             this.openMainScreen(authentication["token"])
         } else {
@@ -70,7 +84,7 @@ export default class Login extends React.Component {
             )
         }
     }
-
+    
     openMainScreen = (token) => {
         this.props.navigation.navigate("Main",  {token: token});
     }

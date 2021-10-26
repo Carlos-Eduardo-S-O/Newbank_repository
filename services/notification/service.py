@@ -2,17 +2,24 @@ import jwt
 import json
 from flask import Flask, jsonify, request
 from functools import wraps
-
+from cipher import decrypt, encrypt
+from urllib.parse import unquote
 
 service = Flask(__name__)
 
+# Service Data
 DEBUG = True
-NOTIFICATION_PATH = '/dictionaries/notifications.json'
-KEY_PATH = '/dictionaries/config.json'
-CERTIFICATE_KEY = '/certificate/key.pem'
-CERTIFICATE = '/certificate/cert.pem'   
 HOST = '0.0.0.0'
 PORT = 5000
+
+# Dictionaries
+USERS_PATH = '/dictionaries/users.json'
+KEY_PATH = '/dictionaries/config.json'
+NOTIFICATION_PATH = '/dictionaries/notifications.json'
+# RSA Files
+CERTIFICATE_KEY =  '/ssl_files/certificate_key.pem'
+CERTIFICATE =   '/ssl_files/certificate.pem'
+
 
 def start():
     global notification_list
@@ -21,6 +28,13 @@ def start():
         notification = json.load(notifications_file)
         notification_list = notification['notifications']
         notifications_file.close()
+    
+    global users_list
+    
+    with open(USERS_PATH, 'r') as users_file:
+        users = json.load(users_file)
+        users_list = users['users']
+        users_file.close()
 
 def get_key():
     key = ''
@@ -32,12 +46,26 @@ def get_key():
     
     return key
 
+def get_user_public_key(id):
+    public_key = None
+    
+    for user in users_list:
+        if user['id'] == id:
+            public_key = user['publickey']
+            break
+    
+    return public_key
+
 def get_id():
-    token = request.args.get('token')
+    id = None
     
-    data = jwt.decode(token, get_key(), algorithm="HS256")
+    error, token = decrypt(unquote(request.args.get('token')))
     
-    return data['id']
+    if not error:
+        data = jwt.decode(token, get_key(), algorithm="HS256")
+        id = data['id']
+    
+    return id
 
 def filter_by_id(id):
     global notification_list
@@ -55,10 +83,11 @@ def get_last_notification(notification_list):
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = request.args.get('token')
+        error, token = decrypt(unquote(request.args.get('token')))
         
-        if not token:
+        if not token and not error:
             return jsonify({'message' : 'Token is missing!'}), 403
+        
         try:
             jwt.decode(token, get_key(), algorithm="HS256")
         except:
@@ -76,19 +105,38 @@ def run():
 
 @service.route('/notification')
 @token_required
-def get_notification_by_id():    
-    notifications = filter_by_id(get_id())
+def get_notification_by_id():
+    id = get_id()
+    response = None
+    public_key = get_user_public_key(id)
     
-    if notifications:
-        notification = get_last_notification(notifications)
-        
-        return jsonify({
-            'notification' : notification['notification']
-        })
+    if id:
+        notifications = filter_by_id(id)
+    
+        if notifications:
+            notification = get_last_notification(notifications)
+            
+            response = {
+                'notification' : notification['notification']
+            }
+        else:
+            response = {
+                'response' : 'no_matches'
+            }
     else:
-        return jsonify({
+        response = {
             'response' : 'no_matches'
-        })
+        }
+    
+    # Encrypt the data to return
+    error, encrypted = encrypt(public_key, json.dumps(response, separators=(',', ':')))
+    response = encrypted
+    
+    # If something  goes wrong with the encryption the text error will be returned
+    if error:
+        response = jsonify({ "result" : "Something went wrong, please try again later"})
+    
+    return response
 
 if __name__ == '__main__':
     start()

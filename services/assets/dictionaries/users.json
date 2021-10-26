@@ -5,6 +5,7 @@
             "login" : "Carlos",
             "name" : "Carlos Eduardo",
             "password" : "1234",
+            "publickey" : "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzp0IsBU1yWmAdiJ9DWH8\ns8+TqRD2Tk/p7gbJbzVwZMLoPbmuHystyVyWSDNUV3DrwaZdtPj7IeDetmH2N8TC\nJWSL9qKm9vpJEDWY0cyhZQmGj69Uqss3IVqxYNi9wmr2cLtXKdOH6Z81nz02k5JF\nyozWyajSiRBOvjzT4sQAaq3BAwPkQKz2Xa3o9uecukfKy6iwWSipe/JqStEIMk8l\nHG1jtr3u/eCDllW2F9XIGJrACG9BDnNogBkUR1YAkK6gsaYAUzWpdAtvCAr5y6z9\npSwoC/FHwiXQ416ukOawFKIgrkRhcfzz3G9oumnG1wm9jmxw9XKpix+lajfq0OUP\nEwIDAQAB\n-----END PUBLIC KEY-----",
             "date": "2021-06-25 13:22:01.766071",
             "account" : {
                 "id" : 1,
@@ -12,19 +13,20 @@
                 "user_id" : 1,
                 "date": "2021-06-25 13:22:01.766071"
             }
-        },
+        }, 
         {
             "id" : 2,
             "login" : "João",
             "name" : "João Pessoa",
             "password" : "pass",
+            "publickey" : "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzp0IsBU1yWmAdiJ9DWH8\ns8+TqRD2Tk/p7gbJbzVwZMLoPbmuHystyVyWSDNUV3DrwaZdtPj7IeDetmH2N8TC\nJWSL9qKm9vpJEDWY0cyhZQmGj69Uqss3IVqxYNi9wmr2cLtXKdOH6Z81nz02k5JF\nyozWyajSiRBOvjzT4sQAaq3BAwPkQKz2Xa3o9uecukfKy6iwWSipe/JqStEIMk8l\nHG1jtr3u/eCDllW2F9XIGJrACG9BDnNogBkUR1YAkK6gsaYAUzWpdAtvCAr5y6z9\npSwoC/FHwiXQ416ukOawFKIgrkRhcfzz3G9oumnG1wm9jmxw9XKpix+lajfq0OUP\nEwIDAQAB\n-----END PUBLIC KEY-----",
             "date": "2021-06-25 13:22:01.766071",
             "account" : {
                 "id" : 2,
                 "balance": 188900.00,
                 "user_id" : 2,
                 "date": "2021-06-25 13:22:01.766071"
-            }
+            } 
         }
     ]
 }

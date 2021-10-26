@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import com.RNFetchBlob.RNFetchBlobPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+// react-native-rsa-native
+import com.RNRSA.RNRSAPackage;
 // react-native-vector-icons
 import com.oblador.vectoricons.VectorIconsPackage;
 // react-native-webview
@@ -66,6 +68,7 @@ public class PackageList {
       new MainReactPackage(mConfig),
       new RNFetchBlobPackage(),
       new RNGestureHandlerPackage(),
+      new RNRSAPackage(),
       new VectorIconsPackage(),
       new RNCWebViewPackage()
     ));

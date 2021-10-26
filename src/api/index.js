@@ -1,8 +1,12 @@
 import RNFetchBlob from 'react-native-fetch-blob'
+import { encrypt, decrypt } from './cipher';
+import keyfile from './keyfile.json'
 
 const AUTHENTICATION_URL = 'https://172.29.1.1:5000/';
 const MAIN_URL = 'https://172.29.1.2:5000/';
 const NOTIFICATION_URL = 'https://172.29.1.3:5000/';
+
+const PRIVATE_KEY = keyfile.private
 
 export const accessURL = async (url) => {
     let promise = null;    
@@ -14,7 +18,15 @@ export const accessURL = async (url) => {
         }).fetch('GET', url)
 
         if (response) {
-            promise = Promise.resolve(response.json())
+            if (response.data == "error user not found"){
+                const result = {"result": response.data}
+                promise = Promise.resolve(result)
+            }else{
+                // Decrypt the data sent by back-end
+                let data = await decrypt(response.data, PRIVATE_KEY)
+                data = JSON.parse(data)
+                promise = Promise.resolve(data)           
+            }
         } else {
             promise = Promise.resolve(response)
         }
@@ -27,21 +39,31 @@ export const accessURL = async (url) => {
 }
 
 export const authenticate = async (login, password) => {
-    const credentials = '{"login": "' + login + '", "password": "' + password + '"}'
-
-    const url = AUTHENTICATION_URL + 'authenticate?data=' + credentials
+    // Setting the data to send to back-end
+    const preparedLogin = '"login": "' + login + '"'
+    const preparedPassword = '"password": "' + password + '"'
     
+    const jsonString = encodeURIComponent(await encrypt('{' + preparedLogin + ', ' + preparedPassword + '}'))
+    
+    const url = AUTHENTICATION_URL + 'authenticate?data=' + jsonString 
+
     return accessURL(url)
 }
 
 export const getUser = async (token) => {
-    const url = MAIN_URL + 'main?token=' + token
+    const preparedToken = encodeURIComponent(await encrypt(token))
+
+    const url = MAIN_URL + 'main?token=' + preparedToken
     
     return accessURL(url)
 }
 
 export const getNotification = async (token) => {
-    const url = NOTIFICATION_URL + 'notification?token=' + token
+    const preparedToken = encodeURIComponent(await encrypt(token))
+
+    const url = NOTIFICATION_URL + 'notification?token=' + preparedToken
     
     return accessURL(url)
 }
+
+
