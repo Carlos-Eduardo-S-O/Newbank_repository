@@ -1,0 +1,15 @@
+com/newbank/ReactNativeFlipper.java
+ com.newbank.ReactNativeFlipper
+ com.newbank.ReactNativeFlipper$1
+ com.newbank.ReactNativeFlipper$2
+ com.newbank.ReactNativeFlipper$2$1
+com/newbank/MainApplication.java
+ com.newbank.MainApplication
+ com.newbank.MainApplication$1
+com/newbank/MainActivity.java
+ com.newbank.MainActivity
+ com.newbank.MainActivity$1
+com/newbank/BuildConfig.java
+ com.newbank.BuildConfig
+com/facebook/react/PackageList.java
+ com.facebook.react.PackageList

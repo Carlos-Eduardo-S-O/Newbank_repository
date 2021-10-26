@@ -1,0 +1,47 @@
+version: '3' 
+services:
+  authentication:
+    image: newbank
+    build: .
+    hostname: authentication
+    expose:
+      - '5000'
+    volumes:
+      - './authentication:/service'
+      - './assets/dictionaries:/dictionaries'
+    command: python3 service.py
+    networks:
+      newnet:
+        ipv4_address: 172.29.1.1
+  main:
+    image: newbank
+    build: .
+    hostname: main
+    expose:
+      - '5000'
+    volumes:
+      - './main_screen:/service'
+      - './assets/dictionaries:/dictionaries'
+    command: python3 service.py
+    networks:
+      newnet:
+        ipv4_address: 172.29.1.2
+  notification:
+    image: newbank
+    build: .
+    hostname: notification
+    expose:
+      - '5000'
+    volumes:
+      - './notification:/service'
+      - './assets/dictionaries:/dictionaries'
+    command: python3 service.py
+    networks:
+      newnet:
+        ipv4_address: 172.29.1.3
+networks:
+  newnet:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.29.1.0/16

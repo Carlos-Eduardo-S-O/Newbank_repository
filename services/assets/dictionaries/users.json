@@ -1,0 +1,30 @@
+{
+    "users":[
+        {
+            "id" : 1,
+            "login" : "Carlos",
+            "name" : "Carlos Eduardo",
+            "password" : "1234",
+            "date": "2021-06-25 13:22:01.766071",
+            "account" : {
+                "id" : 1,
+                "balance": 188900.00,
+                "user_id" : 1,
+                "date": "2021-06-25 13:22:01.766071"
+            }
+        },
+        {
+            "id" : 2,
+            "login" : "João",
+            "name" : "João Pessoa",
+            "password" : "pass",
+            "date": "2021-06-25 13:22:01.766071",
+            "account" : {
+                "id" : 2,
+                "balance": 188900.00,
+                "user_id" : 2,
+                "date": "2021-06-25 13:22:01.766071"
+            }
+        }
+    ]
+}

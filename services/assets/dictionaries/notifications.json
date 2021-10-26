@@ -1,0 +1,28 @@
+{
+    "notifications":[
+        {
+            "id" : 1,
+            "notification" : "Seu saldo foi acrescido em R$20.",
+            "user_id" : 1,
+            "datetime" : "2021-06-25 13:22:01.766071"
+        },
+        {
+            "id" : 2,
+            "notification" : "Recebemos o pagamento da sua fatura.",
+            "user_id" : 1,
+            "datetime" : "2021-06-25 13:22:01.766071"
+        },
+        {
+            "id" : 3,
+            "notification" : "Sua fatura foi paga.",
+            "user_id" : 2,
+            "datetime" : "2021-06-25 13:22:01.766071"
+        },
+        {
+            "id" : 4,
+            "notification" : "Seu saldo foi acrescido em R$30.",
+            "user_id" : 2,
+            "datetime" : "2021-06-25 13:22:01.766071"
+        }
+    ]
+}
