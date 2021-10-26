@@ -1,19 +1,39 @@
+import jwt
 import json
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+from functools import wraps
 
 service = Flask(__name__)
 
 DEBUG = True
-PATH = '/dictionaries/users.json'
+USERS_PATH = '/dictionaries/users.json'
+KEY_PATH = '/dictionaries/config.json'
 
 def start():
     global users_list
     
-    with open(PATH, 'r') as users_file:
+    with open(USERS_PATH, 'r') as users_file:
         users = json.load(users_file)
         users_list = users['users']
         users_file.close()
 
+def get_key():
+    key = ''
+    
+    with open(KEY_PATH, 'r') as key_file:
+        key_ = json.load(key_file)
+        key = key_["key"]
+        key_file.close()
+    
+    return key
+
+def get_id():
+    token = request.args.get('token')
+    
+    data = jwt.decode(token, get_key(), algorithm="HS256")
+    
+    return data['id']
+    
 def filter_by_id(id):
     global users_list
     response = None
@@ -25,9 +45,26 @@ def filter_by_id(id):
     
     return response
 
-@service.route('/main/<int:id>')
-def get_main_screen_data(id):    
-    user = filter_by_id(id)
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.args.get('token')
+        
+        if not token: 
+            return jsonify({'message' : 'Token is missing!'}), 403
+            
+        try:
+            jwt.decode(token, get_key(), algorithm="HS256")
+        except:
+            return jsonify({'message' : 'Token is invalid!'}), 403
+        
+        return f(*args, **kwargs)
+    return decorated
+
+@service.route('/main')
+@token_required
+def get_main_screen_data():    
+    user = filter_by_id(get_id())
     
     if user:
         account = user['account']

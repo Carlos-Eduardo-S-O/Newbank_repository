@@ -1,15 +1,28 @@
+import jwt
+import datetime
 import json
 from flask import Flask, jsonify
 
 service = Flask(__name__)
 
 DEBUG = True
-PATH = '/dictionaries/users.json'
+USERS_PATH = '/dictionaries/users.json' 
+KEY_PATH = '/dictionaries/config.json'
+
+def get_key():
+    key = ''
+    
+    with open(KEY_PATH, 'r') as key_file:
+        key_ = json.load(key_file)
+        key = key_["key"]
+        key_file.close()
+    
+    return key
 
 def start():
     global users_list
     
-    with open(PATH, 'r') as users_file:
+    with open(USERS_PATH, 'r') as users_file:
         users = json.load(users_file)
         users_list = users["users"]
         users_file.close()
@@ -30,16 +43,16 @@ def find_right_user(login, password):
 @service.route('/authenticate/<string:login>/<string:password>')
 def authenticate(login, password):
     
-    is_authenticated = 'unauthenticated'
-    
     response, user_id = find_right_user(login, password)
     if response:
-        is_authenticated = 'authenticated'
+        token = jwt.encode({'id' : user_id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, get_key(), algorithm="HS256")
         
-    return jsonify({
-        "result" : is_authenticated, 
-        "id" : user_id
-    }) 
+        return jsonify({
+            "result" : 'authenticated', 
+            "token" : token.decode('UTF-8')
+        }) 
+        
+    return jsonify({ "result" : 'unauthenticated' }) 
 
 if __name__ == '__main__':
     start()

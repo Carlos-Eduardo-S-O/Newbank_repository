@@ -1,18 +1,38 @@
+import jwt
 import json
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+from functools import wraps
 
 service = Flask(__name__)
 
 DEBUG = True
-PATH = '/dictionaries/notifications.json'
+NOTIFICATION_PATH = '/dictionaries/notifications.json'
+KEY_PATH = '/dictionaries/config.json'
 
 def start():
     global notification_list
     
-    with open(PATH, 'r') as notifications_file:
+    with open(NOTIFICATION_PATH, 'r') as notifications_file:
         notification = json.load(notifications_file)
         notification_list = notification['notifications']
         notifications_file.close()
+
+def get_key():
+    key = ''
+    
+    with open(KEY_PATH, 'r') as key_file:
+        key_ = json.load(key_file)
+        key = key_['key']
+        key_file.close()
+    
+    return key
+
+def get_id():
+    token = request.args.get('token')
+    
+    data = jwt.decode(token, get_key(), algorithm="HS256")
+    
+    return data['id']
 
 def filter_by_id(id):
     global notification_list
@@ -27,9 +47,25 @@ def filter_by_id(id):
 def get_last_notification(notification_list):
     return notification_list[len(notification_list) - 1]
 
-@service.route('/notification/<int:id>')
-def get_notification_by_id(id):    
-    notifications = filter_by_id(id)
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.args.get('token')
+        
+        if not token:
+            return jsonify({'message' : 'Token is missing!'}), 403
+        try:
+            jwt.decode(token, get_key(), algorithm="HS256")
+        except:
+            return jsonify({'message' : 'Token is invalid!'}), 403
+        
+        return f(*args, **kwargs)
+    return decorated
+
+@service.route('/notification')
+@token_required
+def get_notification_by_id():    
+    notifications = filter_by_id(get_id())
     
     if notifications:
         notification = get_last_notification(notifications)

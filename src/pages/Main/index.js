@@ -20,21 +20,21 @@ export default function Main( props ) {
 
   let offset = 0;
   const translateY = new Animated.Value(0);
-  const [ userId, setUserId ] = useState(props.navigation.state.params.userId)
+  const [ token ] = useState(props.navigation.state.params.token)
   const [ user, setUser ] = useState(null)
   const [ notification, setNotification ] = useState(null)
-
+  
   useEffect(() => {
-    getUser(userId).then((user) => {
-      setUser(user)
-    }).catch((error) => {
-      console.error("Error searching user.\n Details: ", error)
-    })
-    
-    getNotification(userId).then((notification) => {
+    getNotification(token).then((notification) => {
       setNotification(notification)
     }).catch((error) => {
       console.error("Error searching notification.\n Details: ", error)
+    })
+    
+    getUser(token).then((user) => {
+      setUser(user)
+    }).catch((error) => {
+      console.error("Error searching user.\n Details: ", error)
     })
   }, []);
   

@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/home/carlos/Documents/newbank_fixing_encryption/Newbank_app-0.1/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-cs/values-cs.xml",
+            "outputFile": "/home/carlos/Documents/newbank_fixing_encryption/Newbank_app-0.2/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-cs/values-cs.xml",
             "map": [
                 {
                     "source": "/home/carlos/.gradle/caches/transforms-2/files-2.1/d67cd79abd1ca209502f51c69d23182b/core-1.1.0/res/values-cs/values-cs.xml",

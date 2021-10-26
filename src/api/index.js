@@ -1,4 +1,4 @@
-const AUTHENTICATION_URL = 'http://172.29.1.1:5000/'
+const AUTHENTICATION_URL = 'http://172.29.1.1:5000/';
 const MAIN_URL = 'http://172.29.1.2:5000/';
 const NOTIFICATION_URL = 'http://172.29.1.3:5000/';
 
@@ -26,14 +26,14 @@ export const authenticate = async (login, password) => {
     return accessURL(url)
 }
 
-export const getUser = async (userId) => {
-    const url = MAIN_URL + 'main/' + userId
+export const getUser = async (token) => {
+    const url = MAIN_URL + 'main?token=' + token
     
     return accessURL(url)
 }
 
-export const getNotification = async (userId) => {
-    const url = NOTIFICATION_URL + 'notification/' + userId
+export const getNotification = async (token) => {
+    const url = NOTIFICATION_URL + 'notification?token=' + token
     
     return accessURL(url)
 }
