@@ -17,8 +17,8 @@ USERS_PATH = '/dictionaries/users.json'
 KEY_PATH = '/dictionaries/config.json' 
 
 # SSL files
-CERTIFICATE_KEY = '/ssl_files/certificate_key.pem' 
-CERTIFICATE = '/ssl_files/certificate.pem' 
+CERTIFICATE_KEY = '/ssl_files/certificate_key.pem'
+CERTIFICATE = '/ssl_files/certificate.pem'
 
 def start():
     global users_list
