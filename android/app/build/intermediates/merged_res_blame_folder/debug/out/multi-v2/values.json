@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/home/carlos/Documents/newbank_fixing_encryption/Newbank_app-0.2/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
+            "outputFile": "/home/carlos/Documents/newbank_fixing_encryption/Newbank_app-0.3/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
             "map": [
                 {
                     "source": "/home/carlos/.gradle/caches/transforms-2/files-2.1/f48ad73390f9d41c4966ce25bccc3bb7/jetified-react-native-0.64.2/res/values/values.xml",
@@ -20,23 +20,6 @@
                         "endLines": "27,28,193,226,227,228,229,230,242,256,257,292,294,295,296,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,320,321,322,323,324,325,326,327,328,329,330,331,332,333,334,335,336,338,339,340,341,342,343,344,346,347,348,349,358,362,1438,1441,1445,1449,1667,1670,1744,1774,1783,1790,1797,1800,1803,1806,1812,1931",
                         "endColumns": "62,62,50,47,48,47,48,48,42,53,47,72,74,122,95,88,107,116,119,119,101,102,110,106,102,110,168,167,116,103,112,155,107,112,90,110,168,97,126,124,94,106,79,75,72,86,70,70,77,79,85,83,71,81,80,83,76,86,84,78,74,72,76,77,72,77,10,10,12,12,10,10,12,12,25,34,10,10,10,10,10,12,12,10",
                         "endOffsets": "1982,2045,13215,15173,15222,15270,15319,15368,15942,16634,16682,19067,19187,19310,19406,19495,19603,19720,19840,19960,20062,20165,20276,20383,20486,20597,20766,20934,21051,21155,21268,21424,21532,21645,21736,21847,22016,22114,22241,22366,22461,22568,22648,22724,22797,22884,22955,23026,23104,23184,23270,23354,23426,23508,23589,23726,23803,23890,23975,24054,24129,24202,24350,24428,24501,24579,25269,25517,94886,95077,95279,95485,111299,111488,118414,120605,121143,121561,121939,122116,122295,122478,122843,132082"
-                    }
-                },
-                {
-                    "source": "/home/carlos/Documents/newbank_fixing_encryption/Newbank_app-0.2/android/app/src/main/res/values/strings.xml",
-                    "from": {
-                        "startLines": "1",
-                        "startColumns": "4",
-                        "startOffsets": "16",
-                        "endColumns": "44",
-                        "endOffsets": "56"
-                    },
-                    "to": {
-                        "startLines": "293",
-                        "startColumns": "4",
-                        "startOffsets": "19072",
-                        "endColumns": "44",
-                        "endOffsets": "19112"
                     }
                 },
                 {
@@ -78,7 +61,7 @@
                     }
                 },
                 {
-                    "source": "/home/carlos/Documents/newbank_fixing_encryption/Newbank_app-0.2/android/app/src/main/res/values/styles.xml",
+                    "source": "/home/carlos/Documents/newbank_fixing_encryption/Newbank_app-0.3/android/app/src/main/res/values/styles.xml",
                     "from": {
                         "startLines": "3",
                         "startColumns": "4",
@@ -116,20 +99,20 @@
                     }
                 },
                 {
-                    "source": "/home/carlos/Documents/newbank_fixing_encryption/Newbank_app-0.2/android/app/build/generated/res/resValues/debug/values/gradleResValues.xml",
+                    "source": "/home/carlos/Documents/newbank_fixing_encryption/Newbank_app-0.3/android/app/src/main/res/values/strings.xml",
                     "from": {
-                        "startLines": "6,8",
-                        "startColumns": "4,4",
-                        "startOffsets": "156,262",
-                        "endColumns": "63,68",
-                        "endOffsets": "215,326"
+                        "startLines": "1",
+                        "startColumns": "4",
+                        "startOffsets": "16",
+                        "endColumns": "44",
+                        "endOffsets": "56"
                     },
                     "to": {
-                        "startLines": "262,263",
-                        "startColumns": "4,4",
-                        "startOffsets": "16930,16994",
-                        "endColumns": "63,68",
-                        "endOffsets": "16989,17058"
+                        "startLines": "293",
+                        "startColumns": "4",
+                        "startOffsets": "19072",
+                        "endColumns": "44",
+                        "endOffsets": "19112"
                     }
                 },
                 {
@@ -166,6 +149,23 @@
                         "startOffsets": "15578,15647",
                         "endColumns": "68,56",
                         "endOffsets": "15642,15699"
+                    }
+                },
+                {
+                    "source": "/home/carlos/Documents/newbank_fixing_encryption/Newbank_app-0.3/android/app/build/generated/res/resValues/debug/values/gradleResValues.xml",
+                    "from": {
+                        "startLines": "6,8",
+                        "startColumns": "4,4",
+                        "startOffsets": "156,262",
+                        "endColumns": "63,68",
+                        "endOffsets": "215,326"
+                    },
+                    "to": {
+                        "startLines": "262,263",
+                        "startColumns": "4,4",
+                        "startOffsets": "16930,16994",
+                        "endColumns": "63,68",
+                        "endOffsets": "16989,17058"
                     }
                 }
             ]

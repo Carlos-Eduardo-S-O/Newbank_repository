@@ -1,13 +1,25 @@
 import jwt
 import datetime
 import json
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 service = Flask(__name__)
 
 DEBUG = True
-USERS_PATH = '/dictionaries/users.json' 
-KEY_PATH = '/dictionaries/config.json'
+USERS_PATH = '/dictionaries/users.json'  
+KEY_PATH = '/dictionaries/config.json'   
+CERTIFICATE_KEY = '/certificate/key.pem'  
+CERTIFICATE = '/certificate/cert.pem'    
+HOST = '0.0.0.0'
+PORT = 5000
+
+def start():
+    global users_list
+    
+    with open(USERS_PATH, 'r') as users_file:
+        users = json.load(users_file)
+        users_list = users["users"]
+        users_file.close()
 
 def get_key():
     key = ''
@@ -18,14 +30,6 @@ def get_key():
         key_file.close()
     
     return key
-
-def start():
-    global users_list
-    
-    with open(USERS_PATH, 'r') as users_file:
-        users = json.load(users_file)
-        users_list = users["users"]
-        users_file.close()
 
 def find_right_user(login, password):
     global users_list
@@ -40,8 +44,19 @@ def find_right_user(login, password):
     
     return response, user_id
 
-@service.route('/authenticate/<string:login>/<string:password>')
-def authenticate(login, password):
+def run():
+    service.run( 
+        host=HOST,
+        debug=DEBUG,
+        ssl_context=(CERTIFICATE, CERTIFICATE_KEY)
+    )
+
+@service.route('/authenticate')
+def authenticate():
+    data = json.loads(request.args.get('data'))
+    
+    login = data['login']
+    password = data['password']
     
     response, user_id = find_right_user(login, password)
     if response:
@@ -55,8 +70,5 @@ def authenticate(login, password):
     return jsonify({ "result" : 'unauthenticated' }) 
 
 if __name__ == '__main__':
-    start()
-    service.run(
-        host='0.0.0.0',
-        debug=DEBUG
-    )
+    start() 
+    run()

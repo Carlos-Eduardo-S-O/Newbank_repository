@@ -1,4 +1,4 @@
-version: '3' 
+version: '3'
 services:
   authentication:
     image: newbank
@@ -8,6 +8,7 @@ services:
       - '5000'
     volumes:
       - './authentication:/service'
+      - './assets/certificate:/certificate'
       - './assets/dictionaries:/dictionaries'
     command: python3 service.py
     networks:
@@ -21,6 +22,7 @@ services:
       - '5000'
     volumes:
       - './main_screen:/service'
+      - './assets/certificate:/certificate'
       - './assets/dictionaries:/dictionaries'
     command: python3 service.py
     networks:
@@ -34,6 +36,7 @@ services:
       - '5000'
     volumes:
       - './notification:/service'
+      - './assets/certificate:/certificate'
       - './assets/dictionaries:/dictionaries'
     command: python3 service.py
     networks:

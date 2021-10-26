@@ -51,19 +51,19 @@ export default class Login extends React.Component {
 
     authenticateUser = () => {
         const { login, password } = this.state
-
+        
         authenticate(login, password).then((authenticationResult) => {
-            this.isAuthenticated(authenticationResult["result"], authenticationResult["token"])
+            this.isAuthenticated(authenticationResult)
         }).catch((error) => {
             console.error("Error authenticating the user.   \n Details: ", error)
         })
-
+ 
     }
 
-    isAuthenticated = (authentication, token) =>{
+    isAuthenticated = (authentication) =>{
         
-        if (authentication == "authenticated") {
-            this.openMainScreen(token)
+        if (authentication["result"] == "authenticated") {
+            this.openMainScreen(authentication["token"])
         } else {
             Toast.show("ERRO! Usuário e/ou senha estão incorretos.",
                 Toast.LONG
@@ -72,7 +72,6 @@ export default class Login extends React.Component {
     }
 
     openMainScreen = (token) => {
-        //navigator.navigate("Details", {feedId: feed._id, navigator: navigator})
         this.props.navigation.navigate("Main",  {token: token});
     }
 }

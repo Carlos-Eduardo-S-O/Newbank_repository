@@ -8,6 +8,10 @@ service = Flask(__name__)
 DEBUG = True
 USERS_PATH = '/dictionaries/users.json'
 KEY_PATH = '/dictionaries/config.json'
+CERTIFICATE_KEY = '/certificate/key.pem' 
+CERTIFICATE = '/certificate/cert.pem'   
+HOST = '0.0.0.0'
+PORT = 5000
 
 def start():
     global users_list
@@ -61,6 +65,13 @@ def token_required(f):
         return f(*args, **kwargs)
     return decorated
 
+def run():
+    service.run( 
+        host=HOST,
+        debug=DEBUG,
+        ssl_context=(CERTIFICATE, CERTIFICATE_KEY)
+    )
+
 @service.route('/main')
 @token_required
 def get_main_screen_data():    
@@ -81,7 +92,4 @@ def get_main_screen_data():
 
 if __name__ == '__main__':
     start()
-    service.run(
-        host='0.0.0.0',
-        debug=DEBUG
-    )
+    run()
