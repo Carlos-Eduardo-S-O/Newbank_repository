@@ -4,6 +4,7 @@ from flask import Flask, jsonify, request
 from functools import wraps
 from cipher import decrypt, encrypt
 from urllib.parse import unquote
+import mysql.connector as mysql
 
 service = Flask(__name__)
 
@@ -20,21 +21,17 @@ NOTIFICATION_PATH = '/dictionaries/notifications.json'
 CERTIFICATE_KEY =  '/ssl_files/certificate_key.pem'
 CERTIFICATE =   '/ssl_files/certificate.pem'
 
+# Database info
+MYSQL_SERVER = "database"
+MYSQL_USER = "root"
+MYSQL_PASS = "admin"
+MYSQL_BASE_NAME = "newbank"
 
-def start():
-    global notification_list
-    
-    with open(NOTIFICATION_PATH, 'r') as notifications_file:
-        notification = json.load(notifications_file)
-        notification_list = notification['notifications']
-        notifications_file.close()
-    
-    global users_list
-    
-    with open(USERS_PATH, 'r') as users_file:
-        users = json.load(users_file)
-        users_list = users['users']
-        users_file.close()
+def get_bd_connection():
+    connection = mysql.connect(
+        host=MYSQL_SERVER, user=MYSQL_USER, password=MYSQL_PASS, database=MYSQL_BASE_NAME
+    )
+    return connection
 
 def get_key():
     key = ''
@@ -48,11 +45,15 @@ def get_key():
 
 def get_user_public_key(id):
     public_key = None
+    connection = get_bd_connection()
+    cursor = connection.cursor(dictionary=True)
     
-    for user in users_list:
-        if user['id'] == id:
-            public_key = user['publickey']
-            break
+    query = f"SELECT publickey FROM user_login WHERE id = '{id}'"
+    cursor.execute(
+        query
+    )
+    
+    public_key = cursor.fetchone()["publickey"]
     
     return public_key
 
@@ -68,12 +69,15 @@ def get_id():
     return id
 
 def filter_by_id(id):
-    global notification_list
-    response = list()
+    connection = get_bd_connection()
+    cursor = connection.cursor(dictionary=True)
     
-    for notification in notification_list:
-        if notification['user_id'] == id:
-            response.append(notification)
+    query = f"SELECT notification FROM latest_notification WHERE user = '{id}' LIMIT 1"
+    cursor.execute(
+        query
+    )
+    
+    response = cursor.fetchone()["notification"]
     
     return response
 
@@ -117,7 +121,7 @@ def get_notification_by_id():
             notification = get_last_notification(notifications)
             
             response = {
-                'notification' : notification['notification']
+                'notification' : notification
             }
         else:
             response = {
@@ -139,5 +143,4 @@ def get_notification_by_id():
     return response
 
 if __name__ == '__main__':
-    start()
     run()

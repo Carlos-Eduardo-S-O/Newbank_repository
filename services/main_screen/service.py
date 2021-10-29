@@ -4,6 +4,7 @@ from flask import Flask, jsonify, request
 from functools import wraps
 from cipher import decrypt, encrypt
 from urllib.parse import unquote
+import mysql.connector as mysql
 
 service = Flask(__name__)
 
@@ -20,13 +21,17 @@ KEY_PATH = '/dictionaries/config.json'
 CERTIFICATE_KEY =  '/ssl_files/certificate_key.pem'
 CERTIFICATE =   '/ssl_files/certificate.pem'
 
-def start():
-    global users_list
-    
-    with open(USERS_PATH, 'r') as users_file:
-        users = json.load(users_file)
-        users_list = users['users']
-        users_file.close()
+# Database info
+MYSQL_SERVER = "database"
+MYSQL_USER = "root"
+MYSQL_PASS = "admin"
+MYSQL_BASE_NAME = "newbank"
+
+def get_bd_connection():
+    connection = mysql.connect(
+        host=MYSQL_SERVER, user=MYSQL_USER, password=MYSQL_PASS, database=MYSQL_BASE_NAME
+    )
+    return connection
 
 def get_key():
     key = ''
@@ -50,13 +55,15 @@ def get_id():
     return id
     
 def filter_by_id(id):
-    global users_list
-    response = None
+    connection = get_bd_connection()
+    cursor = connection.cursor(dictionary=True)
     
-    for user in users_list:
-        if user['id'] == id:
-            response = user
-            break
+    query = f"SELECT * FROM user_list WHERE id = '{id}'"
+    cursor.execute(
+        query
+    )
+    
+    response = cursor.fetchone()
     
     return response
 
@@ -95,12 +102,11 @@ def get_main_screen_data():
         
         if user:
             public_key = user['publickey']
-            account = user['account']
             
             response = {
                 'name' : user['name'],
                 'account' : {
-                    'balance': account['balance'],
+                    'balance': user["balance"],
                 }
             }
         else:
@@ -121,5 +127,4 @@ def get_main_screen_data():
     return response
 
 if __name__ == '__main__':
-    start()
     run()

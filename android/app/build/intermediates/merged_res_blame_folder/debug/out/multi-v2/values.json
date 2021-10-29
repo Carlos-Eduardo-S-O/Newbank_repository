@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/home/carlos/Documents/Newbank_app/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
+            "outputFile": "/home/carlos/Documents/Newbank_repository/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
             "map": [
                 {
                     "source": "/home/carlos/.gradle/caches/transforms-2/files-2.1/f48ad73390f9d41c4966ce25bccc3bb7/jetified-react-native-0.64.2/res/values/values.xml",
@@ -80,7 +80,7 @@
                     }
                 },
                 {
-                    "source": "/home/carlos/Documents/Newbank_app/android/app/build/generated/res/resValues/debug/values/gradleResValues.xml",
+                    "source": "/home/carlos/Documents/Newbank_repository/android/app/build/generated/res/resValues/debug/values/gradleResValues.xml",
                     "from": {
                         "startLines": "6,8",
                         "startColumns": "4,4",
@@ -133,7 +133,7 @@
                     }
                 },
                 {
-                    "source": "/home/carlos/Documents/Newbank_app/android/app/src/main/res/values/strings.xml",
+                    "source": "/home/carlos/Documents/Newbank_repository/android/app/src/main/res/values/strings.xml",
                     "from": {
                         "startLines": "1",
                         "startColumns": "4",
@@ -150,7 +150,7 @@
                     }
                 },
                 {
-                    "source": "/home/carlos/Documents/Newbank_app/android/app/src/main/res/values/styles.xml",
+                    "source": "/home/carlos/Documents/Newbank_repository/android/app/src/main/res/values/styles.xml",
                     "from": {
                         "startLines": "3",
                         "startColumns": "4",

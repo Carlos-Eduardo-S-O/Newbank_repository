@@ -1,9 +1,10 @@
 import jwt
 import datetime
 import json
-from flask import Flask, jsonify, request
+from flask import Flask, request
 from cipher import decrypt, encrypt
 from urllib.parse import unquote
+import mysql.connector as mysql
 
 service = Flask(__name__)
 
@@ -20,13 +21,17 @@ KEY_PATH = '/dictionaries/config.json'
 CERTIFICATE_KEY = '/ssl_files/certificate_key.pem'
 CERTIFICATE = '/ssl_files/certificate.pem'
 
-def start():
-    global users_list
-    
-    with open(USERS_PATH, 'r') as users_file:
-        users = json.load(users_file)
-        users_list = users["users"]
-        users_file.close()
+# Database info
+MYSQL_SERVER = "database"
+MYSQL_USER = "root"
+MYSQL_PASS = "admin"
+MYSQL_BASE_NAME = "newbank"
+
+def get_bd_connection():
+    connection = mysql.connect(
+        host=MYSQL_SERVER, user=MYSQL_USER, password=MYSQL_PASS, database=MYSQL_BASE_NAME
+    )
+    return connection
 
 def get_key():
     key = ''
@@ -39,21 +44,19 @@ def get_key():
     return key
 
 def find_right_user(login, password):
-    global users_list
-    response = False
-    user_id = None 
+    connection = get_bd_connection()
     
-    for user in users_list:
-        if user['login'] == login and user['password'] == password:
-            response = True
-            user_id = user['id']
-            public_key = user['publickey']
-            break
-
-    if response == True:
-        return response, user_id, public_key
+    cursor = connection.cursor(dictionary=True)
+    
+    query = f"SELECT id, publickey FROM user_login WHERE login = '{login}' AND password = '{password}'"
+    cursor.execute(query)
+    
+    result = cursor.fetchone()
+    
+    if result:
+        return True, result["id"], result["publickey"]
     else:
-        return response, None, None
+        return False, None, None
 
 def run():
     service.run( 
@@ -83,7 +86,7 @@ def authenticate():
         public_key = pub_key
         
         if response:
-            token = jwt.encode({'id' : user_id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, get_key(), algorithm="HS256")
+            token = jwt.encode({'id' : user_id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=5000)}, get_key(), algorithm="HS256")
             
             response = {
                 "result" : 'authenticated', 
@@ -105,5 +108,4 @@ def authenticate():
     return response
 
 if __name__ == '__main__':
-    start()
     run()
