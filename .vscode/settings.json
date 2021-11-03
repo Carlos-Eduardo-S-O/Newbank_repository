@@ -1,0 +1,30 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "172.29.1.4",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "Newbank",
+            "username": "root",
+            "password": "admin",
+            "database": "newbank"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "172.29.1.4",
+            "port": 3306,
+            "driver": "MySQL",
+            "database": "newbank",
+            "name": "newbank",
+            "username": "root",
+            "password": "admin"
+        }
+    ]
+}
