@@ -48,10 +48,14 @@ def find_right_user(login, password):
     
     cursor = connection.cursor(dictionary=True)
     
-    query = f"SELECT id, publickey FROM user_login WHERE login = '{login}' AND password = '{password}'"
-    cursor.execute(query)
+    query = "SELECT id, publickey FROM user_login WHERE login = %s AND password = %s"
+    params = (login, password)
+    
+    cursor.execute(query, params)
     
     result = cursor.fetchone()
+    
+    connection.close()
     
     if result:
         return True, result["id"], result["publickey"]

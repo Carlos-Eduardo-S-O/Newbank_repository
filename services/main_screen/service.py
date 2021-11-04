@@ -58,12 +58,14 @@ def filter_by_id(id):
     connection = get_bd_connection()
     cursor = connection.cursor(dictionary=True)
     
-    query = f"SELECT * FROM user_list WHERE id = '{id}'"
-    cursor.execute(
-        query
-    )
+    query = "SELECT * FROM user_list WHERE id = %s"
+    params = (id)
+    
+    cursor.execute(query, params)
     
     response = cursor.fetchone()
+    
+    connection.close()
     
     return response
 
