@@ -48,12 +48,14 @@ def get_user_public_key(id):
     connection = get_bd_connection()
     cursor = connection.cursor(dictionary=True)
     
-    query = f"SELECT publickey FROM user_login WHERE id = '{id}'"
-    cursor.execute(
-        query
-    )
+    query = "SELECT publickey FROM user_login WHERE id = %s"
+    params = (id)
+    
+    cursor.execute(query, params)
     
     public_key = cursor.fetchone()["publickey"]
+    
+    connection.close()
     
     return public_key
 
@@ -72,12 +74,14 @@ def filter_by_id(id):
     connection = get_bd_connection()
     cursor = connection.cursor(dictionary=True)
     
-    query = f"SELECT notification FROM latest_notification WHERE user = '{id}' LIMIT 1"
-    cursor.execute(
-        query
-    )
+    query = "SELECT notification FROM latest_notification WHERE user = %s LIMIT 1"
+    params = (id)
+    
+    cursor.execute(query, params)
     
     response = cursor.fetchone()["notification"]
+    
+    connection.close()
     
     return response
 

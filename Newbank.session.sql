@@ -48,4 +48,7 @@ CREATE VIEW user_login AS
     SELECT id, publickey, login, password 
     FROM users;
 
+# 'or 1=1#'
+# 'SELECT id, publickey FROM user_login WHERE login = %s AND password = %s'
+
 
